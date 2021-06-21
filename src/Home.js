@@ -11,11 +11,15 @@ const Home = () => {
     const title = "I am title"
     const title2 = "Only Mario"
 
+    function clickHandler(id) {
+
+        const newBlogs = blogs.filter(blog => blog.id !== id)
+        setBlogs(newBlogs)
+    }
+
     return (
         <div className="home">
-            <BlogList blogs={blogs} title={title} />
-            <BlogList blogs={blogs.filter((blog) => blog.author === 'mario')} title={title2} />
-
+            <BlogList blogs={blogs} title={title} clickHandler={clickHandler} />
         </div >
     );
 }
