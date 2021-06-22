@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import BlogList from './BlogList'
 
 const Home = () => {
@@ -16,6 +16,12 @@ const Home = () => {
         const newBlogs = blogs.filter(blog => blog.id !== id)
         setBlogs(newBlogs)
     }
+
+    // 當有 re-render 情況發生時會觸發 useEffect 函式
+    // 通常 useEffect 可以用來 fetch 資料 或是 處理 authentication (驗證資訊)
+    useEffect(() => {
+        console.log('use effect ran');
+    })
 
     return (
         <div className="home">
