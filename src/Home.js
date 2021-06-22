@@ -9,7 +9,8 @@ const Home = () => {
     ]);
 
     const title = "I am title"
-    const title2 = "Only Mario"
+
+    const [name, setName] = useState('Mario')
 
     function clickHandler(id) {
 
@@ -19,13 +20,17 @@ const Home = () => {
 
     // 當有 re-render 情況發生時會觸發 useEffect 函式
     // 通常 useEffect 可以用來 fetch 資料 或是 處理 authentication (驗證資訊)
+    // 後方的空 array 可以讓 useEffect 只會在畫面 render 第一次的時候跑，其他時候都不會被觸發了
     useEffect(() => {
         console.log('use effect ran');
-    })
+        console.log(name);
+    }, [name])
 
     return (
         <div className="home">
             <BlogList blogs={blogs} title={title} clickHandler={clickHandler} />
+            <button onClick={() => setName('luigi')}>Change Name</button>
+            <p>{name}</p>
         </div >
     );
 }
