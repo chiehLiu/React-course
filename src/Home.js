@@ -1,39 +1,17 @@
-import { useState, useEffect } from 'react';
-import BlogList from './BlogList'
+import BlogList from './BlogList';
+import useFetch from './useFetch';
 
 const Home = () => {
-    const [blogs, setBlogs] = useState(null);
-    const [isPending, setIsPending] = useState(true);
-    const [error, setError] = useState(null);
 
     const title = "I am title"
 
-    // 當有 re-render 情況發生時會觸發 useEffect 函式
-    // 通常 useEffect 可以用來 fetch 資料 或是 處理 authentication (驗證資訊)
-    // 後方的空 array 可以讓 useEffect 只會在畫面 render 第一次的時候跑，其他時候都不會被觸發了
-    useEffect(() => {
-        fetch('http://localhost:8000/blogss')
-            .then(res => {
-                if (!res.ok) {
-                    throw Error('could not fetch the data from that resource');
-                }
-                return res.json()
-            }).then((data) => {
-                setBlogs(data);
-                setIsPending(false);
-                setError(null);
-            }).catch(err => {
-                setError(err.message);
-                setIsPending(false);
-                console.log(err.message);
-            })
-    }, [])
+    const { data, isPending, error } = useFetch('http://localhost:8000/blogs')
 
     return (
         <div className="home">
             {error && <div>{error}</div>}
             {isPending && <div>Loading...</div>}
-            {blogs && <BlogList blogs={blogs} title={title} />}
+            {data && <BlogList blogs={data} title={title} />}
         </div >
     );
 }
