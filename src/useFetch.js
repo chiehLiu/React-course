@@ -16,24 +16,28 @@ const useFetch = (url) => {
     // 後方的空 array 可以讓 useEffect 只會在畫面 render 第一次的時候跑，其他時候都不會被觸發了
 
     useEffect(() => {
-        fetch(url)
-            .then(res => {
-                if (!res.ok) {
-                    throw Error('could not fetch the data from that resource');
-                }
-                return res.json()
-            }).then((data) => {
-                setData(data);
-                setIsPending(false);
-                setError(null);
-            }).catch(err => {
-                setError(err.message);
-                setIsPending(false);
-                console.log(err.message);
-            })
+        setTimeout(() => {
+            fetch(url)
+                .then(res => {
+                    if (!res.ok) { // error coming back from server
+                        throw Error('could not fetch the data for that resource');
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    setIsPending(false);
+                    setData(data);
+                    setError(null);
+                })
+                .catch(err => {
+                    // auto catches network / connection error
+                    setIsPending(false);
+                    setError(err.message);
+                })
+        }, 1000);
     }, [url])
 
-    return { data, isPending, error }
+    return { data, isPending, error };
 }
 
 export default useFetch;
