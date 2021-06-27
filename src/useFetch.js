@@ -16,8 +16,11 @@ const useFetch = (url) => {
     // 後方的空 array 可以讓 useEffect 只會在畫面 render 第一次的時候跑，其他時候都不會被觸發了
 
     useEffect(() => {
+
+        const abortCont = new AbortController();
+
         setTimeout(() => {
-            fetch(url)
+            fetch(url, { signal: abortCont.signal })
                 .then(res => {
                     if (!res.ok) { // error coming back from server
                         throw Error('could not fetch the data for that resource');
@@ -30,11 +33,17 @@ const useFetch = (url) => {
                     setError(null);
                 })
                 .catch(err => {
-                    // auto catches network / connection error
-                    setIsPending(false);
-                    setError(err.message);
+                    if (err.name === 'AbortError') {
+                        console.log('fetch aborted');
+                    } else {
+                        setIsPending(false);
+                        setError(err.message);
+                    }
+
                 })
         }, 1000);
+
+        return () => abortCont.abort();
     }, [url])
 
     return { data, isPending, error };
