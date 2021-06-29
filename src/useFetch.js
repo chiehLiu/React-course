@@ -1,6 +1,9 @@
 // custom hook function must start with use+...
 
-import { useState, useEffect } from 'react';
+import {
+    useState,
+    useEffect
+} from 'react';
 
 
 const useFetch = (url) => {
@@ -20,7 +23,9 @@ const useFetch = (url) => {
         const abortCont = new AbortController();
 
         setTimeout(() => {
-            fetch(url, { signal: abortCont.signal })
+            fetch(url, {
+                    signal: abortCont.signal
+                })
                 .then(res => {
                     if (!res.ok) { // error coming back from server
                         throw Error('could not fetch the data for that resource');
@@ -46,7 +51,11 @@ const useFetch = (url) => {
         return () => abortCont.abort();
     }, [url])
 
-    return { data, isPending, error };
+    return {
+        data,
+        isPending,
+        error
+    };
 }
 
 export default useFetch;
